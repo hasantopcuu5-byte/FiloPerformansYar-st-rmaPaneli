@@ -387,6 +387,7 @@ let shipRankingHistory = []; // Şampiyonlar Ligi için
 let manualArrows = {};
 let arrowMode = 'auto'; // 'auto' veya 'manual' 
 let isComplianceVisible = localStorage.getItem('isComplianceVisible_v1') !== 'false';
+let isTechnicalVisible = localStorage.getItem('isTechnicalVisible_v1') !== 'false';
 let overdueJobs = JSON.parse(localStorage.getItem('overdueJobs_v1') || '{}');
 let complianceBonus = JSON.parse(localStorage.getItem('complianceBonus_v1') || '{}');
 let drillBonus = JSON.parse(localStorage.getItem('drillBonus_v1') || '{}');
@@ -421,11 +422,41 @@ function updateComplianceVisibilityUI() {
         }
     }
 }
+function updateTechnicalVisibilityUI() {
+    const btn = document.getElementById('btnToggleTechnical');
+    if (btn) {
+        if (isTechnicalVisible) {
+            btn.innerHTML = "👁️ Technical Sütunlarını Gizle";
+            btn.style.background = "linear-gradient(135deg, var(--teal), #008880)";
+            btn.style.color = "#000";
+            btn.style.border = "none";
+        } else {
+            btn.innerHTML = "🙈 Technical Sütunlarını Göster";
+            btn.style.background = "rgba(255,90,114,0.15)";
+            btn.style.color = "var(--bad)";
+            btn.style.border = "1px solid var(--bad)";
+        }
+    }
+    
+    // Tech sekmelerini tamamen gizle veya göster
+    const btnTw = document.getElementById('viewTechWeekly');
+    const btnTm = document.getElementById('viewTechMonthly');
+    if(btnTw) btnTw.style.display = isTechnicalVisible ? 'flex' : 'none';
+    if(btnTm) btnTm.style.display = isTechnicalVisible ? 'flex' : 'none';
+}
 
+function toggleTechnicalVisibility() {
+    isTechnicalVisible = !isTechnicalVisible;
+    localStorage.setItem('isTechnicalVisible_v1', isTechnicalVisible);
+    updateTechnicalVisibilityUI(); 
+    if (currentView === 'ranking') renderRankingView(filo); // Tabloyu anında güncelle
+    saveData(); // Değişikliği buluta kaydet
+}
 function toggleComplianceColumn() {
     isComplianceVisible = !isComplianceVisible;
     localStorage.setItem('isComplianceVisible_v1', isComplianceVisible);
     updateComplianceVisibilityUI(); // Buton görünümünü güncelle
+  updateTechnicalVisibilityUI();
     if (currentView === 'ranking') renderRankingView(filo); // Tabloyu anında yeniden çiz
     saveData(); // Değişikliği buluta kaydet
 }
@@ -616,16 +647,26 @@ function getShipFinalRateForMode(ship, mode) {
     let opsMail = getShipMailRate(ship);
     let opsDaily = getShipDailyRateForMode(ship, mode);
     let opsMonthly = getShipAylikRateForMode(ship, mode);
-    let techWeekly = getShipTechWeeklyRateForMode(ship, mode);
-    let techMonthly = getShipTechMonthlyRateForMode(ship, mode);
     
     let baseScore;
-    // Haftalık moddaysa sadece Mail, Günlük Rapor ve Tech Weekly toplanıp 3'e bölünür
-    if (mode === 'haftalik') {
-        baseScore = (opsMail + opsDaily + techWeekly) / 3;
+    
+    if (!isTechnicalVisible) {
+        // TECHNICAL GİZLİYSE SADECE OPERATIONS ÜZERİNDEN HESAPLA
+        if (mode === 'haftalik') {
+            baseScore = (opsMail + opsDaily) / 2;
+        } else {
+            baseScore = (opsMail + opsDaily + opsMonthly) / 3;
+        }
     } else {
-        // Diğer modlarda 5 departman kriteri dahil edilip 5'e bölünür
-        baseScore = (opsMail + opsDaily + opsMonthly + techWeekly + techMonthly) / 5;
+        // TECHNICAL AÇIKSA ESKİSİ GİBİ HESAPLA
+        let techWeekly = getShipTechWeeklyRateForMode(ship, mode);
+        let techMonthly = getShipTechMonthlyRateForMode(ship, mode);
+        
+        if (mode === 'haftalik') {
+            baseScore = (opsMail + opsDaily + techWeekly) / 3;
+        } else {
+            baseScore = (opsMail + opsDaily + opsMonthly + techWeekly + techMonthly) / 5;
+        }
     }
     
     return baseScore + getOverdueBonus(ship, mode) + getComplianceBonus(ship) + getDrillBonus(ship);
