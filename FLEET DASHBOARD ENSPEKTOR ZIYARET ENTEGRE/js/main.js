@@ -1591,17 +1591,15 @@ async function generatePDF() {
         await new Promise(r => setTimeout(r, 600));
         await takeSnapshot('matrisTable', 'Daily Work Reports', false);
 
-        switchView('aylik');
-        await new Promise(r => setTimeout(r, 600));
-        await takeSnapshot('matrisTable', 'Monthly Reports', false);
+        if (isTechnicalVisible) {
+            switchView('techWeekly');
+            await new Promise(r => setTimeout(r, 600));
+            await takeSnapshot('matrisTable', 'Tech Weekly Reports', false);
 
-        switchView('techWeekly');
-        await new Promise(r => setTimeout(r, 600));
-        await takeSnapshot('matrisTable', 'Tech Weekly Reports', false);
-
-        switchView('techMonthly');
-        await new Promise(r => setTimeout(r, 600));
-        await takeSnapshot('matrisTable', 'Tech Monthly Reports', false);
+            switchView('techMonthly');
+            await new Promise(r => setTimeout(r, 600));
+            await takeSnapshot('matrisTable', 'Tech Monthly Reports', false);
+        }
 
         switchView('defect');
         await new Promise(r => setTimeout(r, 600));
