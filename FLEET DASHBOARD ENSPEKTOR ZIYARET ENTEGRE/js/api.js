@@ -41,6 +41,10 @@ function loadData() {
         isComplianceVisible = data.isComplianceVisible;
         localStorage.setItem('isComplianceVisible_v1', isComplianceVisible);
     }
+      if (data.isTechnicalVisible !== undefined) {
+        isTechnicalVisible = data.isTechnicalVisible;
+        localStorage.setItem('isTechnicalVisible_v1', isTechnicalVisible);
+    }
   
     // 1. Filo Listesini Ayarla
     if (data.filo && data.filo.length > 0) {
@@ -147,7 +151,7 @@ if (data.techMonthly) techMonthlyData = data.techMonthly;
     if (currentView === 'ranking' && typeof renderHallOfFameCards === 'function') {
         renderHallOfFameCards();
     }
-  
+  if(typeof updateTechnicalVisibilityUI === 'function') updateTechnicalVisibilityUI();
     // 7. İşlemi bitir ve temizle
     document.getElementById('userPage').style.cursor = 'default';
     
@@ -256,6 +260,7 @@ techMonthly: techMonthlyData,
       complianceBonus: complianceBonus,
       drillBonus: drillBonus,
       isComplianceVisible: isComplianceVisible,
+        isTechnicalVisible: isTechnicalVisible,
       personel: perfLoadData(),
       isComingSoonActive: isComingSoonActive,
       inspectorHistory: inspectorHistory // <--- İŞTE BURAYA EKLENDİ
