@@ -651,19 +651,19 @@ function renderTechMonthlyView() {
     const opsColspan = mode === 'haftalik' ? 3 : 4;
     const techColspan = mode === 'haftalik' ? 1 : 2;
     
-    // --- YENİ EKLENEN: TECHNICAL GİZLE/GÖSTER BAŞLIKLARI ---
+    // TECHNICAL GİZLE/GÖSTER BAŞLIKLARI (white-space:nowrap ve font boyutları optimize edildi)
     let techHeaderTop = isTechnicalVisible ? `
         <th colspan="${techColspan}" style="text-align:center; padding:18px 5px 8px 5px; border-bottom:none; position:relative;">
             <div style="position:absolute; top:8px; left:4px; right:4px; bottom:0; border-top:1px solid rgba(255,255,255,0.4); border-left:1px solid rgba(255,255,255,0.4); border-right:1px solid rgba(255,255,255,0.4); border-radius:6px 6px 0 0; pointer-events:none;"></div>
-            <div style="display:inline-block; font-family:'Plus Jakarta Sans', sans-serif; font-weight:700; letter-spacing:1px; color:#fff; font-size:0.75rem; position:relative; z-index:1; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">
+            <div style="display:inline-block; white-space:nowrap; font-family:'Plus Jakarta Sans', sans-serif; font-weight:700; letter-spacing:1px; color:#fff; font-size:0.75rem; position:relative; z-index:1; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">
                 TECHNICAL DEPARTMENT
             </div>
         </th>
     ` : '';
 
     let techHeaderBottom = isTechnicalVisible ? `
-        <th style="border-top:1px dashed var(--border); padding-top:8px;">WEEKLY REPORTS RATIO</th>
-        ${mode === 'haftalik' ? '' : '<th style="border-top:1px dashed var(--border); padding-top:8px;">MONTHLY REPORTS RATIO</th>'}
+        <th style="border-top:1px dashed var(--border); padding-top:8px; white-space:nowrap; font-size:0.6rem;">WEEKLY REPORTS RATIO</th>
+        ${mode === 'haftalik' ? '' : '<th style="border-top:1px dashed var(--border); padding-top:8px; white-space:nowrap; font-size:0.6rem;">MONTHLY REPORTS RATIO</th>'}
     ` : '';
 
     let thH = `
@@ -673,23 +673,23 @@ function renderTechMonthlyView() {
         
         <th colspan="${opsColspan}" style="text-align:center; padding:18px 5px 8px 5px; border-bottom:none; position:relative;">
             <div style="position:absolute; top:8px; left:4px; right:4px; bottom:0; border-top:1px solid rgba(255,255,255,0.4); border-left:1px solid rgba(255,255,255,0.4); border-right:1px solid rgba(255,255,255,0.4); border-radius:6px 6px 0 0; pointer-events:none;"></div>
-            <div style="display:inline-block; font-family:'Plus Jakarta Sans', sans-serif; font-weight:700; letter-spacing:1px; color:#fff; font-size:0.75rem; position:relative; z-index:1; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">
+            <div style="display:inline-block; white-space:nowrap; font-family:'Plus Jakarta Sans', sans-serif; font-weight:700; letter-spacing:1px; color:#fff; font-size:0.75rem; position:relative; z-index:1; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">
                 OPERATIONS DEPARTMENT
             </div>
         </th>
         
         ${techHeaderTop}
         
-        ${isComplianceVisible ? '<th rowspan="2" style="white-space: normal; max-width: 100px; vertical-align:middle; border-bottom:1px solid var(--border2);">COMPANY PROCEDURES COMPLIANCE BONUS </th>' : ''}
-        <th rowspan="2" style="white-space: normal; max-width: 100px; vertical-align:middle; border-bottom:1px solid var(--border2);">DRILL QUALITY BONUS</th>
-        <th rowspan="2" style="vertical-align:middle; border-bottom:1px solid var(--border2);">FINAL RATIO</th>
+        ${isComplianceVisible ? '<th rowspan="2" style="white-space: normal; min-width: 120px; vertical-align:middle; border-bottom:1px solid var(--border2); line-height: 1.3;">COMPANY PROCEDURES COMPLIANCE BONUS</th>' : ''}
+        <th rowspan="2" style="white-space: normal; min-width: 100px; vertical-align:middle; border-bottom:1px solid var(--border2); line-height: 1.3;">DRILL QUALITY BONUS</th>
+        <th rowspan="2" style="white-space: nowrap; vertical-align:middle; border-bottom:1px solid var(--border2);">FINAL RATIO</th>
         <th rowspan="2" style="vertical-align:middle; border-bottom:1px solid var(--border2);"></th>
     </tr>
     <tr>
-        <th style="border-top:1px dashed var(--border); padding-top:8px;">MAİL FEEDBACK RATIO</th>
-        <th style="border-top:1px dashed var(--border); padding-top:8px;">DAILY WORK REPORT RATIO</th>
-        ${mode === 'haftalik' ? '' : '<th style="border-top:1px dashed var(--border); padding-top:8px;">MONTHLY REPORTS RATIO</th>'}
-        <th style="border-top:1px dashed var(--border); padding-top:8px;">OVERDUE JOB BONUS</th>
+        <th style="border-top:1px dashed var(--border); padding-top:8px; white-space:nowrap; font-size:0.6rem;">MAİL FEEDBACK RATIO</th>
+        <th style="border-top:1px dashed var(--border); padding-top:8px; white-space:nowrap; font-size:0.6rem;">DAILY WORK REPORT RATIO</th>
+        ${mode === 'haftalik' ? '' : '<th style="border-top:1px dashed var(--border); padding-top:8px; white-space:nowrap; font-size:0.6rem;">MONTHLY REPORTS RATIO</th>'}
+        <th style="border-top:1px dashed var(--border); padding-top:8px; white-space:nowrap; font-size:0.6rem;">OVERDUE JOB BONUS</th>
         ${techHeaderBottom}
     </tr>`;
     document.getElementById('tableHead').innerHTML = thH;
@@ -738,7 +738,7 @@ function renderTechMonthlyView() {
         const badgeStyle = `background:${gradMap[stat]}; color:#000; border:none; font-weight:800;`;
         const subBadgeStyle = `background:rgba(255,255,255,0.05); color:var(--muted); border:1px solid rgba(255,255,255,0.1); font-weight:600;`;
 
-        // --- YENİ EKLENEN: TECHNICAL GİZLE/GÖSTER HÜCRELERİ ---
+        // TECHNICAL GİZLE/GÖSTER HÜCRELERİ
         let techCells = isTechnicalVisible ? `
           <td><span class="rbadge" style="font-size:0.8rem; padding:4px 10px; ${subBadgeStyle}">%${techWeeklyRate}</span></td>
           ${mode === 'haftalik' ? '' : `<td><span class="rbadge" style="font-size:0.8rem; padding:4px 10px; ${subBadgeStyle}">%${techMonthlyRate}</span></td>`}
